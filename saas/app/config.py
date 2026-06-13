@@ -9,7 +9,9 @@ HISTORY_PATH = DATA_DIR / "history.json"
 MODEL_DIR = BASE_DIR / "model"
 
 MODEL_ID = os.getenv("MODEL_ID", "dima806/deepfake_vs_real_image_detection")
+MODEL_BACKEND = os.getenv("MODEL_BACKEND", "heuristic").strip().lower()
 MODEL_NAME = "Deepfake vs Real Image Detection ViT"
+HEURISTIC_MODEL_NAME = "Local OpenCV Forensic Screening Backend"
 MODEL_PAGE_URL = f"https://huggingface.co/{MODEL_ID}"
 MODEL_REPORTED_ACCURACY = 0.9927
 MODEL_EVAL_SUPPORT = 76161

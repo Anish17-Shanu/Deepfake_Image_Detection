@@ -11,3 +11,5 @@ services:
         value: "1"
       - key: MODEL_ID
         value: dima806/deepfake_vs_real_image_detection
+      - key: MODEL_BACKEND
+        value: heuristic

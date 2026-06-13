@@ -96,9 +96,11 @@
       <section class="section">
         <div class="section-head">
           <h2>Model stats</h2>
-          <span>{{ "%.2f"|format(record.model_stats.reported_accuracy * 100) }}% reported accuracy</span>
+          <span>{{ record.model_stats.backend }} backend</span>
         </div>
+        <p class="subtle">Active model: {{ record.model_stats.active_model }}</p>
         <p class="subtle">Evaluated support: {{ record.model_stats.evaluation_support }} images. Source: <a href="{{ record.model_stats.model_page_url }}">{{ record.model_stats.model_id }}</a>.</p>
+        <p class="subtle">Model-card accuracy: {{ "%.2f"|format(record.model_stats.reported_accuracy * 100) }}%.</p>
         <p class="subtle">{{ record.model_stats.limitation }}</p>
       </section>
     </main>

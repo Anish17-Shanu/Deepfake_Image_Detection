@@ -21,6 +21,7 @@
           </label>
           <button type="submit">Analyze image</button>
           <small>Model: <a href="{{ model_page_url }}">{{ model_id }}</a></small>
+          <small>Active backend: {{ model_backend }}</small>
           <small>Reported accuracy: {{ "%.2f"|format(model_accuracy * 100) }}% on {{ model_eval_support }} images</small>
         </form>
       </section>
@@ -31,6 +32,7 @@
           <span>Verified model-card metric</span>
         </div>
         <p class="subtle">{{ model_limitation }}</p>
+        <p class="subtle">The Render free deployment uses the lightweight local forensic backend so uploads complete reliably. Use <code>MODEL_BACKEND=vit</code> with the ML requirements on a larger server for full ViT inference.</p>
         <p class="subtle">The app reports model probabilities, authenticity score, quality score, face count, and local forensic indicators for every scan.</p>
       </section>
 

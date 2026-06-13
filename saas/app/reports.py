@@ -15,6 +15,8 @@ def build_report(record: dict) -> str:
         f"Authenticity Score: `{percent(record['scores']['authenticity_score'])}`",
         f"Risk Score: `{percent(record['scores']['risk_score'])}`",
         f"Quality Score: `{percent(record['scores']['quality_score'])}`",
+        f"Active Backend: `{record['model_stats']['backend']}`",
+        f"Active Model: `{record['model_stats']['active_model']}`",
         f"Model Source: `{record['model_stats']['model_page_url']}`",
         f"Reported Evaluation Accuracy: `{percent(record['model_stats']['reported_accuracy'])}` on {record['model_stats']['evaluation_support']} images",
         "",

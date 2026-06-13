@@ -17,6 +17,7 @@ from .config import (
     BASE_DIR,
     MAX_UPLOAD_BYTES,
     MODEL_EVAL_SUPPORT,
+    MODEL_BACKEND,
     MODEL_ID,
     MODEL_LIMITATION,
     MODEL_PAGE_URL,
@@ -66,6 +67,7 @@ def index(request: Request) -> HTMLResponse:
             "model_accuracy": MODEL_REPORTED_ACCURACY,
             "model_eval_support": MODEL_EVAL_SUPPORT,
             "model_limitation": MODEL_LIMITATION,
+            "model_backend": MODEL_BACKEND,
         },
     )
 
@@ -105,6 +107,8 @@ async def analyze(request: Request, image: UploadFile = File(...)) -> RedirectRe
         "scores": scores,
         "model_stats": {
             "model_id": MODEL_ID,
+            "backend": prediction["backend"],
+            "active_model": prediction["model"],
             "model_page_url": MODEL_PAGE_URL,
             "reported_accuracy": MODEL_REPORTED_ACCURACY,
             "evaluation_support": MODEL_EVAL_SUPPORT,

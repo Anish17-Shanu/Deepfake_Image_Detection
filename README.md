@@ -76,6 +76,18 @@ The repository includes `render.yaml`. On Render:
 
 The model downloads into `saas/model/` on first inference if it is not already cached.
 
+The included Render free configuration uses:
+
+```text
+MODEL_BACKEND=heuristic
+```
+
+This keeps uploads working on Render free by using the local OpenCV forensic screening backend. For full Hugging Face ViT inference, use a larger Render instance, install `saas/requirements-ml.txt`, and set:
+
+```text
+MODEL_BACKEND=vit
+```
+
 ## Deploy To Vercel
 
 Vercel is included as a lightweight static project page via `vercel.json` and `public/index.html`.

@@ -22,6 +22,12 @@ The Hugging Face model card reports 99.27% evaluation accuracy on 76,161 images.
 
 The app therefore reports authenticity and risk as screening scores based on model probability, quality checks, and local forensic indicators. They are not a legal or forensic verdict.
 
+## Render Free Backend
+
+The default Render deployment uses `MODEL_BACKEND=heuristic`. This avoids PyTorch memory crashes on free instances and still provides upload, face detection, quality checks, local forensic indicators, authenticity score, risk score, and downloadable reports.
+
+For full ViT inference, deploy on a larger server, install `requirements-ml.txt`, and set `MODEL_BACKEND=vit`.
+
 ## What Was Removed
 
 - JWT authentication
