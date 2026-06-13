@@ -57,9 +57,9 @@ def health() -> dict[str, str]:
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
+        request,
         "index.html",
         {
-            "request": request,
             "history": load_history()[:8],
             "model_id": MODEL_ID,
             "model_page_url": MODEL_PAGE_URL,
@@ -123,7 +123,7 @@ def result(request: Request, scan_id: str) -> HTMLResponse:
     record = find_record(scan_id)
     if record is None:
         raise HTTPException(status_code=404, detail="Result not found.")
-    return templates.TemplateResponse("result.html", {"request": request, "record": record})
+    return templates.TemplateResponse(request, "result.html", {"record": record})
 
 
 @app.get("/reports/{filename}")
