@@ -11,6 +11,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from PIL import Image
 
+Image.MAX_IMAGE_PIXELS = 12_000_000
+
 from .analysis import detect_faces, forensic_stats, quality_stats, score_summary
 from .config import (
     ALLOWED_CONTENT_TYPES,
@@ -78,11 +80,12 @@ async def analyze(request: Request, image: UploadFile = File(...)) -> RedirectRe
         raise HTTPException(status_code=415, detail="Upload a JPEG, PNG, or WEBP image.")
     payload = await image.read()
     if len(payload) > MAX_UPLOAD_BYTES:
-        raise HTTPException(status_code=413, detail="Image is larger than 16 MB.")
+        raise HTTPException(status_code=413, detail="Image is larger than 6 MB.")
     try:
         pil_image = Image.open(io.BytesIO(payload)).convert("RGB")
     except Exception as exc:
         raise HTTPException(status_code=400, detail="The uploaded file is not a valid image.") from exc
+    pil_image.thumbnail((1024, 1024))
 
     scan_id = uuid4().hex[:12]
     filename = safe_filename(image.filename or "upload.jpg")

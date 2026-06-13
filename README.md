@@ -82,7 +82,7 @@ The included Render free configuration uses:
 MODEL_BACKEND=heuristic
 ```
 
-This keeps uploads working on Render free by using the local OpenCV forensic screening backend. For full Hugging Face ViT inference, use a larger Render instance, install `saas/requirements-ml.txt`, and set:
+This keeps uploads working on Render free by using the lightweight Pillow/NumPy forensic screening backend. For full Hugging Face ViT inference, use a larger Render instance, install `saas/requirements-ml.txt`, and set:
 
 ```text
 MODEL_BACKEND=vit

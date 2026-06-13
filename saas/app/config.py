@@ -19,5 +19,5 @@ MODEL_LIMITATION = (
     "The public model card reports 99.27% evaluation accuracy, but also warns that the "
     "training data is several years old and newer generators can cause concept drift."
 )
-MAX_UPLOAD_BYTES = 16 * 1024 * 1024
+MAX_UPLOAD_BYTES = 6 * 1024 * 1024
 ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp"}

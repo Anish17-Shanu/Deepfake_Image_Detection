@@ -24,7 +24,7 @@ The app therefore reports authenticity and risk as screening scores based on mod
 
 ## Render Free Backend
 
-The default Render deployment uses `MODEL_BACKEND=heuristic`. This avoids PyTorch memory crashes on free instances and still provides upload, face detection, quality checks, local forensic indicators, authenticity score, risk score, and downloadable reports.
+The default Render deployment uses `MODEL_BACKEND=heuristic`. This avoids PyTorch and OpenCV memory crashes on free instances and still provides upload, lightweight face-region checks, quality checks, local forensic indicators, authenticity score, risk score, and downloadable reports.
 
 For full ViT inference, deploy on a larger server, install `requirements-ml.txt`, and set `MODEL_BACKEND=vit`.
 

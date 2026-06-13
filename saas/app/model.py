@@ -17,17 +17,18 @@ class DeepfakeModel:
 
 class HeuristicDeepfakeModel:
     def predict(self, image: Image.Image) -> dict:
-        import cv2
         import numpy as np
 
-        rgb = np.array(image.convert("RGB"))
-        gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
+        from .analysis import edge_score, laplacian_variance
 
-        blur = cv2.Laplacian(gray, cv2.CV_64F).var()
+        rgb = np.asarray(image.convert("RGB").resize(_bounded_size(image.size, 640)))
+        gray = np.asarray(image.convert("L").resize(_bounded_size(image.size, 640))).astype(float)
+
+        blur = laplacian_variance(gray)
         texture_risk = np.clip(1 - blur / 700, 0, 1)
         compression_risk = compression_score(rgb)
         lighting_risk = np.clip(np.std([np.mean(rgb[:, :, channel]) for channel in range(3)]) / 45, 0, 1)
-        edge_risk = np.clip(np.mean(cv2.Canny(gray, 80, 160) > 0) * 4, 0, 1)
+        edge_risk = edge_score(gray)
         frequency_risk = frequency_score(gray)
 
         fake_probability = float(
@@ -107,3 +108,9 @@ class VitDeepfakeModel:
         real_idx = next((key for key, label in labels.items() if "real" in label), min(labels))
         fake_idx = next((key for key, label in labels.items() if "fake" in label), max(labels))
         return real_idx, fake_idx
+
+
+def _bounded_size(size: tuple[int, int], max_side: int) -> tuple[int, int]:
+    width, height = size
+    scale = min(1.0, max_side / max(width, height))
+    return max(1, int(width * scale)), max(1, int(height * scale))
