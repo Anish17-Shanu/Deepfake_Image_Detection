@@ -1,0 +1,9 @@
+services:
+  deepfake-web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./model:/app/model
+    restart: unless-stopped

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Result | Deepfake Image Detection{% endblock %}
+
+{% block content %}
+<section class="card result-hero">
+  <div>
+    <span class="section-tag">Prediction Result</span>
+    <h1>{{ record.predicted_label }}</h1>
+    <p>{{ record.interpretation }}</p>
+  </div>
+  <div class="score-badge {% if record.predicted_label == 'FAKE' %}score-fake{% else %}score-real{% endif %}">
+    {{ record.confidence_percent }}
+  </div>
+</section>
+
+<section class="result-grid">
+  <article class="card image-card">
+    <div class="card-head compact">
+      <div>
+        <span class="section-tag">Uploaded Image</span>
+        <h2>{{ record.original_filename }}</h2>
+      </div>
+    </div>
+    <img class="result-image" src="{{ record.upload_url }}" alt="Uploaded image">
+  </article>
+
+  <article class="card result-card">
+    <div class="card-head compact">
+      <div>
+        <span class="section-tag">Probabilities</span>
+        <h2>Confidence breakdown</h2>
+      </div>
+    </div>
+
+    <div class="bar-block">
+      <div class="bar-head"><span>Real</span><strong>{{ record.real_probability_percent }}</strong></div>
+      <div class="bar-track"><div class="bar-fill bar-fill-real" style="width: {{ (record.real_probability * 100) | round(2) }}%;"></div></div>
+    </div>
+
+    <div class="bar-block">
+      <div class="bar-head"><span>Fake</span><strong>{{ record.fake_probability_percent }}</strong></div>
+      <div class="bar-track"><div class="bar-fill bar-fill-fake" style="width: {{ (record.fake_probability * 100) | round(2) }}%;"></div></div>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-card"><span>Prediction ID</span><strong>{{ record.prediction_id }}</strong></div>
+      <div class="detail-card"><span>Timestamp</span><strong>{{ record.timestamp }}</strong></div>
+      <div class="detail-card"><span>Confidence</span><strong>{{ record.confidence_percent }}</strong></div>
+      <div class="detail-card"><span>Model</span><strong>{{ record.model_name }}</strong></div>
+    </div>
+
+    <div class="action-row">
+      <a class="btn btn-primary" href="{{ record.report_url }}">Download Report</a>
+      <a class="btn btn-secondary" href="{{ url_for('history') }}">View History</a>
+      <a class="btn btn-secondary" href="{{ url_for('index') }}">New Prediction</a>
+    </div>
+  </article>
+</section>
+
+{% if record.heatmap_url %}
+<section class="card heatmap-card">
+  <div class="card-head compact">
+    <div>
+      <span class="section-tag">Explainable AI</span>
+      <h2>Grad-CAM heatmap</h2>
+    </div>
+    <p>Visual cue of the most influential regions used by the model.</p>
+  </div>
+  <img class="heatmap-image" src="{{ record.heatmap_url }}" alt="Grad-CAM heatmap">
+</section>
+{% endif %}
+{% endblock %}

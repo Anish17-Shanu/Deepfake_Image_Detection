@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Free Deepfake Image Analyzer</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Local-first analysis</p>
+          <h1>Deepfake Image Analyzer</h1>
+          <p class="subtle">Upload a face image and get real model inference, face quality checks, forensic signals, and risk stats. No accounts, no cloud services, no paid integrations.</p>
+        </div>
+        <form class="upload" action="/analyze" method="post" enctype="multipart/form-data">
+          <label>
+            <span>Image file</span>
+            <input type="file" name="image" accept="image/jpeg,image/png,image/webp" required>
+          </label>
+          <button type="submit">Analyze image</button>
+          <small>Model: <a href="{{ model_page_url }}">{{ model_id }}</a></small>
+          <small>Reported accuracy: {{ "%.2f"|format(model_accuracy * 100) }}% on {{ model_eval_support }} images</small>
+        </form>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Authenticity stats</h2>
+          <span>Verified model-card metric</span>
+        </div>
+        <p class="subtle">{{ model_limitation }}</p>
+        <p class="subtle">The app reports model probabilities, authenticity score, quality score, face count, and local forensic indicators for every scan.</p>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Recent scans</h2>
+          <span>{{ history|length }} shown</span>
+        </div>
+        {% if history %}
+          <div class="history">
+            {% for item in history %}
+              <a class="row" href="/results/{{ item.scan_id }}">
+                <img src="{{ item.image_url }}" alt="">
+                <div>
+                  <strong>{{ item.prediction.label }}</strong>
+                  <span>{{ item.filename }}</span>
+                </div>
+                <div class="score">{{ "%.0f"|format(item.scores.risk_score * 100) }}% risk</div>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="empty">No scans yet.</p>
+        {% endif %}
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Analysis Result</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <nav class="top">
+        <a href="/">New scan</a>
+        <a href="{{ record.report_url }}">Download report</a>
+      </nav>
+
+      <section class="result-layout">
+        <div>
+          <img class="preview" src="{{ record.image_url }}" alt="Uploaded image">
+        </div>
+        <div class="panel">
+          <p class="eyebrow">Prediction</p>
+          <h1 class="{{ 'danger' if record.prediction.label == 'DEEPFAKE' else 'success' }}">{{ record.prediction.label }}</h1>
+          <p class="subtle">{{ "%.2f"|format(record.prediction.confidence * 100) }}% model confidence</p>
+          <div class="bars">
+            <div>
+              <span>Real probability</span>
+              <meter min="0" max="1" value="{{ record.prediction.real_probability }}"></meter>
+              <strong>{{ "%.2f"|format(record.prediction.real_probability * 100) }}%</strong>
+            </div>
+            <div>
+              <span>Deepfake probability</span>
+              <meter min="0" max="1" value="{{ record.prediction.fake_probability }}"></meter>
+              <strong>{{ "%.2f"|format(record.prediction.fake_probability * 100) }}%</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="metrics">
+        <article>
+          <span>Authenticity</span>
+          <strong>{{ "%.0f"|format(record.scores.authenticity_score * 100) }}%</strong>
+        </article>
+        <article>
+          <span>Risk</span>
+          <strong>{{ "%.0f"|format(record.scores.risk_score * 100) }}%</strong>
+        </article>
+        <article>
+          <span>Quality</span>
+          <strong>{{ "%.0f"|format(record.scores.quality_score * 100) }}%</strong>
+        </article>
+        <article>
+          <span>Faces</span>
+          <strong>{{ record.face_detection.face_count }}</strong>
+        </article>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Quality validation</h2>
+          <span>{{ "Accepted" if record.quality.accepted else "Review needed" }}</span>
+        </div>
+        <div class="quality-grid">
+          <p><strong>Blur:</strong> {{ "%.2f"|format(record.quality.blur_score) }}</p>
+          <p><strong>Brightness:</strong> {{ "%.2f"|format(record.quality.brightness) }}</p>
+          <p><strong>Resolution:</strong> {{ record.quality.resolution }} px</p>
+          <p><strong>Face size:</strong> {{ "%.2f"|format(record.quality.face_size_ratio * 100) }}%</p>
+        </div>
+        {% if record.quality.reasons %}
+          <ul>
+            {% for reason in record.quality.reasons %}
+              <li>{{ reason }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Forensic indicators</h2>
+          <span>{{ "%.0f"|format(record.scores.forensic_risk * 100) }}% forensic risk</span>
+        </div>
+        <div class="indicators">
+          {% for item in record.forensics %}
+            <article>
+              <div>
+                <strong>{{ item.name }}</strong>
+                <span>{{ item.evidence }}</span>
+              </div>
+              <div class="score">{{ "%.0f"|format(item.score * 100) }}% {{ item.severity }}</div>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Model stats</h2>
+          <span>{{ "%.2f"|format(record.model_stats.reported_accuracy * 100) }}% reported accuracy</span>
+        </div>
+        <p class="subtle">Evaluated support: {{ record.model_stats.evaluation_support }} images. Source: <a href="{{ record.model_stats.model_page_url }}">{{ record.model_stats.model_id }}</a>.</p>
+        <p class="subtle">{{ record.model_stats.limitation }}</p>
+      </section>
+    </main>
+  </body>
+</html>

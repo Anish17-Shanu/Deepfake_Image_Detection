@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Deepfake Image Detection</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f7f3;
+        --text: #151513;
+        --muted: #66665f;
+        --line: #deded6;
+        --panel: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        width: min(720px, calc(100% - 32px));
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 28px;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: 34px;
+        letter-spacing: 0;
+      }
+
+      p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      code {
+        color: var(--text);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Deepfake Image Detection</h1>
+      <p>
+        This Vercel deployment is a lightweight project landing page. The full analyzer uses
+        PyTorch, OpenCV, and a ViT checkpoint, so deploy the production app on Render with
+        <code>render.yaml</code> or run it with Docker from the <code>saas</code> folder.
+      </p>
+      <p>
+        Render health endpoint: <code>/health</code>. Local app command:
+        <code>cd saas && python -m app.main</code>.
+      </p>
+    </main>
+  </body>
+</html>

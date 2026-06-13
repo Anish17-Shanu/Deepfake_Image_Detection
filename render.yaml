@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: deepfake-image-detection
+    env: docker
+    rootDir: saas
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: MODEL_ID
+        value: dima806/deepfake_vs_real_image_detection

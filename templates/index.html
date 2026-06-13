@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Deepfake Image Detection{% endblock %}
+{% block meta_description %}Upload a JPG, JPEG, or PNG image and detect whether it is real or deepfake using a pretrained model.{% endblock %}
+
+{% block content %}
+<section class="hero-grid">
+  <article class="hero-card hero-copy">
+    <div class="eyebrow">Pretrained model • no training required</div>
+    <h1>Detect deepfake images with a polished, viva-ready dashboard.</h1>
+    <p>
+      Upload a face image, get a real-time prediction with confidence scores, view probability bars,
+      and inspect a Grad-CAM heatmap when available.
+    </p>
+
+    <div class="stat-row">
+      <div class="mini-stat">
+        <span>Model</span>
+        <strong>{{ model_name }}</strong>
+      </div>
+      <div class="mini-stat">
+        <span>Reported Accuracy</span>
+        <strong>99.27%</strong>
+      </div>
+      <div class="mini-stat">
+        <span>Input Size</span>
+        <strong>224 × 224</strong>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#uploadPanel">Start Prediction</a>
+      <a class="btn btn-secondary" href="{{ url_for('about') }}">Model Details</a>
+    </div>
+  </article>
+
+  <aside class="hero-card info-panel">
+    <div class="panel-top">
+      <div>
+        <div class="panel-label">Project Logo</div>
+        <div class="panel-title">DF Detector</div>
+      </div>
+      <div class="logo-badge">AI</div>
+    </div>
+    <div class="panel-list">
+      <div><span>Framework</span><strong>Flask + Transformers</strong></div>
+      <div><span>Model Source</span><strong>Hugging Face</strong></div>
+      <div><span>Deployment</span><strong>CPU-friendly</strong></div>
+      <div><span>Formats</span><strong>JPG, JPEG, PNG</strong></div>
+    </div>
+    <div class="note-box">
+      Designed for a college final-year project demonstration with history tracking, reporting,
+      error handling, and mobile-friendly UI.
+    </div>
+  </aside>
+</section>
+
+<section class="content-grid">
+  <article class="card upload-card" id="uploadPanel">
+    <div class="card-head">
+      <div>
+        <span class="section-tag">Upload</span>
+        <h2>Analyze an image</h2>
+      </div>
+      <p>Preview the image before running prediction.</p>
+    </div>
+
+    <form class="upload-form" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" id="predictForm">
+      <label class="dropzone" for="imageInput">
+        <input id="imageInput" name="image" type="file" accept="image/png,image/jpeg,image/jpg" required>
+        <div class="dropzone-inner">
+          <div class="dropzone-icon">⬆</div>
+          <strong>Click to upload or drop an image here</strong>
+          <span>Supported: JPG, JPEG, PNG</span>
+        </div>
+      </label>
+
+      <div class="preview-grid">
+        <div class="preview-card">
+          <div class="preview-label">Uploaded Preview</div>
+          <img id="imagePreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 640'%3E%3Crect width='900' height='640' rx='36' fill='%23d8c6b7'/%3E%3Ccircle cx='450' cy='260' r='110' fill='%23f3ede6'/%3E%3Cpath d='M250 520c48-90 136-140 200-140s152 50 200 140' fill='none' stroke='%23f3ede6' stroke-width='28' stroke-linecap='round'/%3E%3Ctext x='450' y='560' text-anchor='middle' font-size='28' font-family='Arial' fill='%23715a49'%3EImage preview appears here%3C/text%3E%3C/svg%3E" alt="Preview placeholder">
+        </div>
+        <div class="preview-card">
+          <div class="preview-label">Prediction Workflow</div>
+          <ol class="workflow-list">
+            <li>Upload image from your device.</li>
+            <li>Model reads the face region and classifies it.</li>
+            <li>System stores history and generates a report.</li>
+            <li>Heatmap appears when Grad-CAM succeeds.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary btn-wide" type="submit">Run Detection</button>
+        <div class="helper-text">The app automatically saves the uploaded image and result report.</div>
+      </div>
+    </form>
+  </article>
+
+  <article class="card history-card">
+    <div class="card-head compact">
+      <div>
+        <span class="section-tag">Recent Results</span>
+        <h2>Prediction history</h2>
+      </div>
+    </div>
+
+    {% if latest_history %}
+      <div class="mini-history">
+        {% for item in latest_history %}
+          <a class="history-item" href="{{ item.result_url }}">
+            <div>
+              <strong>{{ item.original_filename }}</strong>
+              <span>{{ item.timestamp }}</span>
+            </div>
+            <div class="pill {% if item.predicted_label == 'FAKE' %}pill-danger{% else %}pill-success{% endif %}">{{ item.predicted_label }}</div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        No predictions yet. Upload an image to create your first record.
+      </div>
+    {% endif %}
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <strong>Confidence</strong>
+        <p>Displays the top-class probability and both class probabilities.</p>
+      </div>
+      <div class="feature-card">
+        <strong>XAI Heatmap</strong>
+        <p>Grad-CAM overlay is generated when the backend can compute it.</p>
+      </div>
+      <div class="feature-card">
+        <strong>Reports</strong>
+        <p>Every prediction is logged as a downloadable text report.</p>
+      </div>
+    </div>
+  </article>
+</section>
+{% endblock %}

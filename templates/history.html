@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}History | Deepfake Image Detection{% endblock %}
+
+{% block content %}
+<section class="card history-hero">
+  <div>
+    <span class="section-tag">Prediction History</span>
+    <h1>Stored results</h1>
+    <p>Each prediction is saved with the uploaded image, probabilities, and downloadable report.</p>
+  </div>
+</section>
+
+{% if records %}
+<section class="history-grid">
+  {% for record in records %}
+    <article class="card history-full-card">
+      <div class="history-topline">
+        <div>
+          <span class="section-tag">{{ record.timestamp }}</span>
+          <h2>{{ record.original_filename }}</h2>
+        </div>
+        <div class="pill {% if record.predicted_label == 'FAKE' %}pill-danger{% else %}pill-success{% endif %}">{{ record.predicted_label }}</div>
+      </div>
+
+      <div class="history-body">
+        <img class="history-image" src="{{ record.upload_url }}" alt="{{ record.original_filename }}">
+        <div class="history-meta">
+          <div class="detail-grid single-column">
+            <div class="detail-card"><span>Confidence</span><strong>{{ record.confidence_percent }}</strong></div>
+            <div class="detail-card"><span>Real</span><strong>{{ record.real_probability_percent }}</strong></div>
+            <div class="detail-card"><span>Fake</span><strong>{{ record.fake_probability_percent }}</strong></div>
+            <div class="detail-card"><span>Prediction ID</span><strong>{{ record.prediction_id }}</strong></div>
+          </div>
+
+          <p class="history-interpretation">{{ record.interpretation }}</p>
+
+          <div class="action-row wrap">
+            <a class="btn btn-primary" href="{{ record.result_url }}">Open Result</a>
+            <a class="btn btn-secondary" href="{{ record.report_url }}">Download Report</a>
+            {% if record.heatmap_url %}
+              <a class="btn btn-secondary" href="{{ record.heatmap_url }}" target="_blank" rel="noopener">Heatmap</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </article>
+  {% endfor %}
+</section>
+{% else %}
+  <section class="card empty-history">
+    <h2>No history yet</h2>
+    <p>Make your first prediction from the home page. The record will appear here automatically.</p>
+    <a class="btn btn-primary" href="{{ url_for('index') }}">Go to Home</a>
+  </section>
+{% endif %}
+{% endblock %}

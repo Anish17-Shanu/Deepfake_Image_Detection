@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}About | Deepfake Image Detection{% endblock %}
+
+{% block content %}
+<section class="card about-hero">
+  <div>
+    <span class="section-tag">About the Model</span>
+    <h1>{{ model_name }}</h1>
+    <p>
+      This project uses a public pretrained image-classification checkpoint from Hugging Face.
+      It is optimized for quick CPU inference on a normal Windows laptop, so it can be demoed immediately without training.
+    </p>
+  </div>
+  <div class="about-stats">
+    <div class="stat-chip"><strong>{{ (model_accuracy * 100) | round(2) }}%</strong><span>Reported accuracy</span></div>
+    <div class="stat-chip"><strong>ViT</strong><span>Architecture</span></div>
+    <div class="stat-chip"><strong>224 px</strong><span>Input size</span></div>
+  </div>
+</section>
+
+<section class="about-grid">
+  <article class="card">
+    <span class="section-tag">Why This Model</span>
+    <h2>Selection rationale</h2>
+    <p>
+      A public XceptionNet checkpoint with robust image-only performance was not as straightforward to obtain as a reusable, documented image classifier.
+      The selected ViT checkpoint has a published self-reported accuracy of 99.27%, a standard Hugging Face repository, and clear downloadable files.
+      That makes it stronger for a production-style student project than an undocumented weight file.
+    </p>
+  </article>
+
+  <article class="card">
+    <span class="section-tag">Preprocessing</span>
+    <h2>How inference works</h2>
+    <ul class="info-list">
+      <li>Images are converted to RGB and resized to 224 × 224.</li>
+      <li>Pixel values are rescaled and normalized using the model processor.</li>
+      <li>The model outputs class probabilities for Real and Fake.</li>
+      <li>Grad-CAM overlay is created from the last transformer block when available.</li>
+    </ul>
+  </article>
+
+  <article class="card">
+    <span class="section-tag">Expected Performance</span>
+    <h2>Accuracy and limitations</h2>
+    <p>
+      The public checkpoint reports 99.27% accuracy on its evaluation set. In practice, real-world accuracy can be lower because of camera noise,
+      compression, crop quality, and concept drift from newer AI-generated images.
+    </p>
+  </article>
+</section>
+
+<section class="links-grid">
+  <article class="card link-card">
+    <h2>Exact download links</h2>
+    <a href="{{ model_page_url }}" target="_blank" rel="noopener">Model repository</a>
+    <a href="{{ model_weight_url }}" target="_blank" rel="noopener">model.safetensors</a>
+    <a href="{{ model_config_url }}" target="_blank" rel="noopener">config.json</a>
+    <a href="{{ model_processor_url }}" target="_blank" rel="noopener">preprocessor_config.json</a>
+  </article>
+
+  <article class="card link-card">
+    <h2>Project use case</h2>
+    <p>
+      Suitable for B.Tech, BCA, MCA, and final-year AI/ML demonstrations. It includes upload, preview, prediction, probability bars,
+      a history page, report generation, error handling, and a professional dashboard interface.
+    </p>
+  </article>
+</section>
+{% endblock %}

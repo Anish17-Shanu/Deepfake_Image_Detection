@@ -1,0 +1,20 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Runtime data
+static/uploads/
+static/results/
+saas/data/
+saas/server-smoke.*.log
+
+# Large model artifacts are downloaded from Hugging Face at runtime.
+model/
+saas/model/
+
+# Local/editor files
+.env
+.env.*
+.vscode/
+.DS_Store
