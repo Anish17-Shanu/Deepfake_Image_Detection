@@ -30,14 +30,24 @@ class HeuristicDeepfakeModel:
         lighting_risk = np.clip(np.std([np.mean(rgb[:, :, channel]) for channel in range(3)]) / 45, 0, 1)
         edge_risk = edge_score(gray)
         frequency_risk = frequency_score(gray)
+        artifact_cluster = 0.0
+        if lighting_risk >= 0.35:
+            artifact_cluster += 0.18
+        if frequency_risk >= 0.18:
+            artifact_cluster += 0.12
+        if edge_risk >= 0.10:
+            artifact_cluster += 0.08
+        if compression_risk <= 0.08 and (lighting_risk >= 0.35 or frequency_risk >= 0.18):
+            artifact_cluster += 0.10
 
         fake_probability = float(
             np.clip(
-                texture_risk * 0.26
-                + compression_risk * 0.20
-                + lighting_risk * 0.16
+                texture_risk * 0.16
+                + compression_risk * 0.08
+                + lighting_risk * 0.32
                 + edge_risk * 0.18
-                + frequency_risk * 0.20,
+                + frequency_risk * 0.26
+                + artifact_cluster,
                 0.03,
                 0.97,
             )

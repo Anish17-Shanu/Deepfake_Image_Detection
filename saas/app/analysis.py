@@ -14,7 +14,16 @@ def detect_faces(image: Image.Image) -> dict:
 
     # Lightweight skin-tone region estimate. This is intentionally conservative
     # and avoids OpenCV so the app fits Render's 512 MB free instance.
-    skin = (red > 95) & (green > 40) & (blue > 20) & ((red - blue) > 15) & ((red - green) > -15)
+    channel_spread = np.maximum.reduce([red, green, blue]) - np.minimum.reduce([red, green, blue])
+    skin = (
+        (red > 80)
+        & (green > 30)
+        & (blue > 15)
+        & (channel_spread > 15)
+        & (red > green * 1.03)
+        & (red > blue * 1.18)
+        & ((red - blue) > 25)
+    )
     if skin.mean() < 0.015:
         return {"face_count": 0, "boxes": []}
 
